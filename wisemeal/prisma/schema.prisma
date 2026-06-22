@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  name                String
+  age                 Int
+  gender              String
+  heightCm            Float
+  weightKg            Float
+  goalWeightKg        Float
+  activityLevel       String
+  goal                String
+  allergies           String   @default("[]")
+  dietaryRestrictions String   @default("[]")
+  dailyCalorieGoal    Int
+  proteinGoalG        Float
+  carbGoalG           Float
+  fatGoalG            Float
+  waterGoalMl         Float    @default(2000)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  foodLogs     FoodLog[]
+  weightLogs   WeightLog[]
+  waterLogs    WaterLog[]
+  stepLogs     StepLog[]
+  mealPlans    MealPlan[]
+  recipes      Recipe[]
+  customFoods  CustomFood[]
+  healthScores HealthScore[]
+}
+
+model FoodLog {
+  id            String   @id @default(cuid())
+  userId        String
+  date          String
+  mealType      String
+  foodName      String
+  brandName     String?
+  amountG       Float
+  calories      Float
+  proteinG      Float
+  carbsG        Float
+  fatG          Float
+  fiberG        Float    @default(0)
+  sugarG        Float    @default(0)
+  sodiumMg      Float    @default(0)
+  cholesterolMg Float    @default(0)
+  saturatedFatG Float    @default(0)
+  transFatG     Float    @default(0)
+  vitaminAMcg   Float    @default(0)
+  vitaminCMg    Float    @default(0)
+  vitaminDMcg   Float    @default(0)
+  calciumMg     Float    @default(0)
+  ironMg        Float    @default(0)
+  potassiumMg   Float    @default(0)
+  allergens     String   @default("[]")
+  imageUrl      String?
+  source        String   @default("manual")
+  ingredients   String   @default("[]")
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model WeightLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String
+  weightKg  Float
+  bmi       Float?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String
+  amountMl  Float
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model StepLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String
+  steps     Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model MealPlan {
+  id        String   @id @default(cuid())
+  userId    String
+  startDate String
+  endDate   String
+  planData  String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Recipe {
+  id           String   @id @default(cuid())
+  userId       String
+  name         String
+  description  String?
+  ingredients  String
+  instructions String
+  servings     Int      @default(1)
+  calories     Float
+  proteinG     Float
+  carbsG       Float
+  fatG         Float
+  fiberG       Float    @default(0)
+  prepTimeMin  Int?
+  cookTimeMin  Int?
+  tags         String   @default("[]")
+  imageUrl     String?
+  sourceUrl    String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model CustomFood {
+  id               String   @id @default(cuid())
+  userId           String
+  name             String
+  brandName        String?
+  barcode          String?
+  per100gCalories  Float
+  per100gProtein   Float
+  per100gCarbs     Float
+  per100gFat       Float
+  per100gFiber     Float @default(0)
+  per100gSugar     Float @default(0)
+  per100gSodium    Float @default(0)
+  servingSizeG     Float    @default(100)
+  servingUnit      String   @default("g")
+  createdAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model HealthScore {
+  id         String   @id @default(cuid())
+  userId     String
+  date       String
+  score      Int
+  breakdown  String
+  advice     String
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+}
