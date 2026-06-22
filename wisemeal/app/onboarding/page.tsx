@@ -37,6 +37,10 @@ export default function OnboardingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
       })
+      if (!res.ok) {
+        const err = await res.text()
+        throw new Error(`サーバーエラー (${res.status}): ${err}`)
+      }
       const user = await res.json()
       setUser({
         id: user.id, name: user.name, age: user.age, gender: user.gender,
@@ -48,7 +52,7 @@ export default function OnboardingPage() {
       })
       router.replace('/dashboard')
     } catch (e) {
-      alert('エラーが発生しました')
+      alert(e instanceof Error ? e.message : 'エラーが発生しました')
     } finally {
       setLoading(false)
     }
@@ -81,7 +85,7 @@ export default function OnboardingPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">年齢</label>
               <input type="number" className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                value={form.age} onChange={e => update('age', Number(e.target.value))} />
+                value={form.age || ''} onChange={e => update('age', e.target.value === '' ? 0 : Number(e.target.value))} />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">性別</label>
@@ -102,17 +106,17 @@ export default function OnboardingPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">身長 (cm)</label>
               <input type="number" className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                value={form.heightCm} onChange={e => update('heightCm', Number(e.target.value))} />
+                value={form.heightCm || ''} onChange={e => update('heightCm', e.target.value === '' ? 0 : Number(e.target.value))} />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">現在の体重 (kg)</label>
               <input type="number" step="0.1" className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                value={form.weightKg} onChange={e => update('weightKg', Number(e.target.value))} />
+                value={form.weightKg || ''} onChange={e => update('weightKg', e.target.value === '' ? 0 : Number(e.target.value))} />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">目標体重 (kg)</label>
               <input type="number" step="0.1" className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                value={form.goalWeightKg} onChange={e => update('goalWeightKg', Number(e.target.value))} />
+                value={form.goalWeightKg || ''} onChange={e => update('goalWeightKg', e.target.value === '' ? 0 : Number(e.target.value))} />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">活動レベル</label>
