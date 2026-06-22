@@ -15,6 +15,7 @@ const MEAL_ICONS: Record<string, string> = { breakfast: '🌅', lunch: '☀️',
 export default function DashboardPage() {
   const router = useRouter()
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const selectedDate = useAppStore(s => s.selectedDate)
   const setSelectedDate = useAppStore(s => s.setSelectedDate)
 
@@ -26,8 +27,9 @@ export default function DashboardPage() {
   const [scoreLoading, setScoreLoading] = useState(false)
 
   useEffect(() => {
-    if (!user) { router.replace('/onboarding'); return }
-  }, [user, router])
+    if (!hasHydrated) return
+    if (!user) router.replace('/onboarding')
+  }, [user, router, hasHydrated])
 
   const fetchData = useCallback(async () => {
     if (!user) return

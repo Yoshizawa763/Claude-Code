@@ -14,6 +14,7 @@ interface ExerciseLog {
 
 export default function HealthPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const selectedDate = useAppStore(s => s.selectedDate)
   const router = useRouter()
 
@@ -28,7 +29,7 @@ export default function HealthPage() {
   const [durationInput, setDurationInput] = useState('')
   const [saving, setSaving] = useState('')
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchData = useCallback(async () => {
     if (!user) return

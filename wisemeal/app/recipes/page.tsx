@@ -16,6 +16,7 @@ interface Recipe {
 
 export default function RecipesPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const router = useRouter()
   const [tab, setTab] = useState<'generate' | 'saved' | 'import'>('generate')
   const [ingredients, setIngredients] = useState('')
@@ -26,7 +27,7 @@ export default function RecipesPage() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchSaved = useCallback(async () => {
     if (!user) return

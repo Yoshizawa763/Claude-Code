@@ -6,14 +6,16 @@ import { useAppStore } from '@/store/app-store'
 export default function RootPage() {
   const router = useRouter()
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
 
   useEffect(() => {
+    if (!hasHydrated) return
     if (user) {
       router.replace('/dashboard')
     } else {
       router.replace('/onboarding')
     }
-  }, [user, router])
+  }, [user, router, hasHydrated])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-emerald-50">

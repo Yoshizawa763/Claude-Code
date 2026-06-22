@@ -9,13 +9,14 @@ interface PlanDay { day: number; date: string; breakfast: MealEntry; lunch: Meal
 
 export default function MealPlanPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const router = useRouter()
   const [plan, setPlan] = useState<{ days: PlanDay[] } | null>(null)
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [activeDay, setActiveDay] = useState(0)
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchPlan = useCallback(async () => {
     if (!user) return

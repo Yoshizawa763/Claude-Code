@@ -12,11 +12,12 @@ interface FoodLog {
 
 export default function NutritionPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const selectedDate = useAppStore(s => s.selectedDate)
   const router = useRouter()
   const [logs, setLogs] = useState<FoodLog[]>([])
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchLogs = useCallback(async () => {
     if (!user) return

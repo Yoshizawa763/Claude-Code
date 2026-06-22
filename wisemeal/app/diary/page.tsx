@@ -11,6 +11,7 @@ interface FoodLog { id: string; mealType: string; foodName: string; amountG: num
 
 export default function DiaryPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const selectedDate = useAppStore(s => s.selectedDate)
   const setSelectedDate = useAppStore(s => s.setSelectedDate)
   const router = useRouter()
@@ -19,7 +20,7 @@ export default function DiaryPage() {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [dailyCalories, setDailyCalories] = useState<Record<string, number>>({})
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchLogs = useCallback(async () => {
     if (!user) return

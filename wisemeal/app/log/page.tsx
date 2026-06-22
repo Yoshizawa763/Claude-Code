@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/app-store'
 import AppShell from '@/components/layout/AppShell'
@@ -24,6 +24,7 @@ interface SearchResult {
 
 export default function LogPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const selectedDate = useAppStore(s => s.selectedDate)
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -45,7 +46,12 @@ export default function LogPage() {
   const [customNote, setCustomNote] = useState('')
   const [manualForm, setManualForm] = useState({ name: '', calories: 0, protein: 0, carbs: 0, fat: 0, amount: 100 })
 
-  if (!user) { router.replace('/onboarding'); return null }
+  useEffect(() => {
+    if (!hasHydrated) return
+    if (!user) router.replace('/onboarding')
+  }, [user, router, hasHydrated])
+
+  if (!hasHydrated || !user) return null
 
   const analyzeImage = async (file: File) => {
     setLoading(true); setResult(null); setImagePreview(URL.createObjectURL(file))

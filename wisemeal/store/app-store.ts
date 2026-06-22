@@ -25,9 +25,11 @@ export interface UserProfile {
 interface AppState {
   user: UserProfile | null
   selectedDate: string
+  _hasHydrated: boolean
   setUser: (user: UserProfile) => void
   clearUser: () => void
   setSelectedDate: (date: string) => void
+  setHasHydrated: (v: boolean) => void
 }
 
 export const useAppStore = create<AppState>()(
@@ -35,10 +37,21 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       user: null,
       selectedDate: new Date().toISOString().split('T')[0],
+      _hasHydrated: false,
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
       setSelectedDate: (date) => set({ selectedDate: date }),
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
     }),
-    { name: 'wisemeal-store' }
+    {
+      name: 'wisemeal-store',
+      partialize: (state) => ({
+        user: state.user,
+        selectedDate: state.selectedDate,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
+    }
   )
 )

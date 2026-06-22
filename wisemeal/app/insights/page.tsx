@@ -7,12 +7,13 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 export default function InsightsPage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const router = useRouter()
   const [trends, setTrends] = useState<{ nutrition: any[]; weight: any[] }>({ nutrition: [], weight: [] })
   const [period, setPeriod] = useState(30)
   const [tab, setTab] = useState<'calories' | 'macros' | 'weight'>('calories')
 
-  useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
+  useEffect(() => { if (!hasHydrated) return; if (!user) router.replace('/onboarding') }, [user, router, hasHydrated])
 
   const fetchTrends = useCallback(async () => {
     if (!user) return

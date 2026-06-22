@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/app-store'
 import AppShell from '@/components/layout/AppShell'
@@ -10,6 +10,7 @@ const RESTRICTIONS = ['ベジタリアン', 'ヴィーガン', '糖質制限', '
 
 export default function ProfilePage() {
   const user = useAppStore(s => s.user)
+  const hasHydrated = useAppStore(s => s._hasHydrated)
   const setUser = useAppStore(s => s.setUser)
   const clearUser = useAppStore(s => s.clearUser)
   const router = useRouter()
@@ -17,7 +18,12 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState(user || {} as any)
 
-  if (!user) { router.replace('/onboarding'); return null }
+  useEffect(() => {
+    if (!hasHydrated) return
+    if (!user) router.replace('/onboarding')
+  }, [user, router, hasHydrated])
+
+  if (!hasHydrated || !user) return null
 
   const bmi = calculateBMI(user.weightKg, user.heightCm)
   const bmiLabel = bmi < 18.5 ? '低体重' : bmi < 25 ? '普通体重' : bmi < 30 ? '肥満(1度)' : '肥満(2度以上)'
