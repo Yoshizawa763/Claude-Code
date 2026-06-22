@@ -31,6 +31,7 @@ model User {
   weightLogs   WeightLog[]
   waterLogs    WaterLog[]
   stepLogs     StepLog[]
+  exerciseLogs ExerciseLog[]
   mealPlans    MealPlan[]
   recipes      Recipe[]
   customFoods  CustomFood[]
@@ -98,6 +99,19 @@ model StepLog {
   date      String
   steps     Int
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model ExerciseLog {
+  id             String   @id @default(cuid())
+  userId         String
+  date           String
+  name           String
+  durationMin    Int
+  metValue       Float
+  caloriesBurned Float
+  createdAt      DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
 }

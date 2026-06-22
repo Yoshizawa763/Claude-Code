@@ -65,6 +65,33 @@ export function calculateDailyCalories(
   return { calories: Math.round(calories), protein, carbs, fat }
 }
 
+export const EXERCISES = [
+  { name: 'マラソン', icon: '🏅', met: 11.0 },
+  { name: 'ランニング', icon: '🏃', met: 9.8 },
+  { name: 'キックボクシング', icon: '🥊', met: 10.3 },
+  { name: '縄跳び', icon: '🪢', met: 10.0 },
+  { name: '水泳', icon: '🏊', met: 8.0 },
+  { name: 'サッカー', icon: '⚽', met: 7.0 },
+  { name: 'テニス', icon: '🎾', met: 7.3 },
+  { name: 'ジョギング', icon: '🏃', met: 7.0 },
+  { name: '自転車', icon: '🚴', met: 6.8 },
+  { name: 'スキー', icon: '⛷️', met: 6.8 },
+  { name: 'バスケットボール', icon: '🏀', met: 6.5 },
+  { name: 'バドミントン', icon: '🏸', met: 5.5 },
+  { name: '筋トレ', icon: '💪', met: 5.0 },
+  { name: '野球', icon: '⚾', met: 5.0 },
+  { name: 'ダンス', icon: '💃', met: 5.0 },
+  { name: 'バレーボール', icon: '🏐', met: 4.0 },
+  { name: 'ゴルフ', icon: '⛳', met: 4.3 },
+  { name: 'ウォーキング', icon: '🚶', met: 3.5 },
+  { name: 'ヨガ', icon: '🧘', met: 3.0 },
+  { name: 'ストレッチ', icon: '🤸', met: 2.5 },
+]
+
+export function calculateExerciseCalories(metValue: number, weightKg: number, durationMin: number): number {
+  return Math.round(metValue * weightKg * (durationMin / 60))
+}
+
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }

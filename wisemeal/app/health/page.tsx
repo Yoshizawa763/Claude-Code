@@ -3,6 +3,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/app-store'
 import AppShell from '@/components/layout/AppShell'
+import { EXERCISES, calculateExerciseCalories } from '@/lib/utils'
+
+interface ExerciseLog {
+  id: string
+  name: string
+  durationMin: number
+  caloriesBurned: number
+}
 
 export default function HealthPage() {
   const user = useAppStore(s => s.user)
@@ -12,19 +20,23 @@ export default function HealthPage() {
   const [waterTotal, setWaterTotal] = useState(0)
   const [steps, setSteps] = useState(0)
   const [weight, setWeight] = useState<number | null>(null)
+  const [exerciseLogs, setExerciseLogs] = useState<ExerciseLog[]>([])
   const [waterInput, setWaterInput] = useState(250)
   const [stepsInput, setStepsInput] = useState('')
   const [weightInput, setWeightInput] = useState('')
+  const [selectedExercise, setSelectedExercise] = useState(EXERCISES[0])
+  const [durationInput, setDurationInput] = useState('')
   const [saving, setSaving] = useState('')
 
   useEffect(() => { if (!user) router.replace('/onboarding') }, [user, router])
 
   const fetchData = useCallback(async () => {
     if (!user) return
-    const [waterRes, stepsRes, weightRes] = await Promise.all([
+    const [waterRes, stepsRes, weightRes, exerciseRes] = await Promise.all([
       fetch(`/api/water?userId=${user.id}&date=${selectedDate}`),
       fetch(`/api/steps?userId=${user.id}&date=${selectedDate}`),
       fetch(`/api/weight?userId=${user.id}`),
+      fetch(`/api/exercises?userId=${user.id}&date=${selectedDate}`),
     ])
     const waterData = await waterRes.json()
     setWaterTotal(waterData.total || 0)
@@ -33,6 +45,7 @@ export default function HealthPage() {
     const weightData = await weightRes.json()
     const todayWeight = weightData.find((w: any) => w.date === selectedDate)
     setWeight(todayWeight?.weightKg || null)
+    setExerciseLogs(await exerciseRes.json())
   }, [user, selectedDate])
 
   useEffect(() => { fetchData() }, [fetchData])
@@ -74,9 +87,41 @@ export default function HealthPage() {
     setSaving('')
   }
 
+  const addExercise = async () => {
+    if (!durationInput || Number(durationInput) <= 0) return
+    setSaving('exercise')
+    const dur = Number(durationInput)
+    const kcal = calculateExerciseCalories(selectedExercise.met, user.weightKg, dur)
+    await fetch('/api/exercises', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: user.id,
+        date: selectedDate,
+        name: selectedExercise.name,
+        durationMin: dur,
+        metValue: selectedExercise.met,
+        caloriesBurned: kcal,
+      })
+    })
+    setDurationInput('')
+    await fetchData()
+    setSaving('')
+  }
+
+  const deleteExercise = async (id: string) => {
+    await fetch(`/api/exercises?id=${id}`, { method: 'DELETE' })
+    fetchData()
+  }
+
+  const previewCalories = durationInput && Number(durationInput) > 0
+    ? calculateExerciseCalories(selectedExercise.met, user.weightKg, Number(durationInput))
+    : 0
+
+  const totalExerciseCalories = exerciseLogs.reduce((s, e) => s + e.caloriesBurned, 0)
+
   const waterPct = Math.min((waterTotal / user.waterGoalMl) * 100, 100)
   const stepPct = Math.min((steps / 8000) * 100, 100)
-
   const WATER_PRESETS = [150, 200, 250, 350, 500]
 
   return (
@@ -87,6 +132,80 @@ export default function HealthPage() {
       </div>
 
       <div className="px-4 py-4 space-y-4">
+        {/* 運動 */}
+        <div className="bg-white rounded-2xl shadow-sm p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🏋️</span>
+              <h3 className="font-semibold text-gray-800">運動</h3>
+            </div>
+            {totalExerciseCalories > 0 && (
+              <span className="text-sm font-bold text-orange-500">+{Math.round(totalExerciseCalories)} kcal 消費</span>
+            )}
+          </div>
+
+          {/* 競技選択 */}
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
+            {EXERCISES.map(ex => (
+              <button key={ex.name} onClick={() => setSelectedExercise(ex)}
+                className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl border-2 transition-colors ${
+                  selectedExercise.name === ex.name
+                    ? 'border-orange-400 bg-orange-50 text-orange-700'
+                    : 'border-gray-200 text-gray-600'
+                }`}>
+                <span className="text-xl">{ex.icon}</span>
+                <span className="text-xs mt-0.5 whitespace-nowrap">{ex.name}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* 時間入力 */}
+          <div className="flex gap-2 mb-3">
+            <div className="flex-1 relative">
+              <input
+                type="number"
+                value={durationInput}
+                onChange={e => setDurationInput(e.target.value === '' ? '' : e.target.value)}
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                placeholder="時間（分）"
+              />
+            </div>
+            <button onClick={addExercise} disabled={saving === 'exercise' || !durationInput}
+              className="bg-orange-500 text-white px-5 rounded-xl font-medium disabled:opacity-50">
+              {saving === 'exercise' ? '...' : '記録'}
+            </button>
+          </div>
+
+          {/* カロリープレビュー */}
+          {previewCalories > 0 && (
+            <div className="bg-orange-50 rounded-xl p-3 mb-3 text-center">
+              <span className="text-sm text-orange-600">
+                {selectedExercise.icon} {selectedExercise.name} {durationInput}分 →
+                <span className="font-bold text-orange-700 ml-1">約 {previewCalories} kcal 消費</span>
+              </span>
+            </div>
+          )}
+
+          {/* 記録済みリスト */}
+          {exerciseLogs.length > 0 && (
+            <div className="space-y-2">
+              {exerciseLogs.map(log => (
+                <div key={log.id} className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2">
+                  <div>
+                    <span className="text-sm font-medium text-gray-700">{log.name}</span>
+                    <span className="text-xs text-gray-400 ml-2">{log.durationMin}分</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-bold text-orange-500">-{Math.round(log.caloriesBurned)} kcal</span>
+                    <button onClick={() => deleteExercise(log.id)} className="text-gray-300 hover:text-red-400 text-lg leading-none">×</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 水分補給 */}
         <div className="bg-white rounded-2xl shadow-sm p-4">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl">💧</span>
@@ -115,6 +234,7 @@ export default function HealthPage() {
           </button>
         </div>
 
+        {/* 歩数 */}
         <div className="bg-white rounded-2xl shadow-sm p-4">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl">👟</span>
@@ -141,6 +261,7 @@ export default function HealthPage() {
           </div>
         </div>
 
+        {/* 体重 */}
         <div className="bg-white rounded-2xl shadow-sm p-4">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl">⚖️</span>

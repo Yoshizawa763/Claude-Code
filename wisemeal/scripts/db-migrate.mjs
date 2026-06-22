@@ -142,6 +142,17 @@ const statements = [
     CONSTRAINT "HealthScore_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
   )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "HealthScore_userId_date_key" ON "HealthScore"("userId", "date")`,
+  `CREATE TABLE IF NOT EXISTS "ExerciseLog" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "durationMin" INTEGER NOT NULL,
+    "metValue" REAL NOT NULL,
+    "caloriesBurned" REAL NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "ExerciseLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  )`,
 ]
 
 try {

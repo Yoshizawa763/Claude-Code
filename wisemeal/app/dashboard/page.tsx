@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [foodLogs, setFoodLogs] = useState<FoodLog[]>([])
   const [waterTotal, setWaterTotal] = useState(0)
   const [steps, setSteps] = useState(0)
+  const [exerciseCalories, setExerciseCalories] = useState(0)
   const [healthScore, setHealthScore] = useState<HealthScore | null>(null)
   const [scoreLoading, setScoreLoading] = useState(false)
 
@@ -30,11 +31,12 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     if (!user) return
-    const [logsRes, waterRes, stepsRes, scoreRes] = await Promise.all([
+    const [logsRes, waterRes, stepsRes, scoreRes, exerciseRes] = await Promise.all([
       fetch(`/api/food-logs?userId=${user.id}&date=${selectedDate}`),
       fetch(`/api/water?userId=${user.id}&date=${selectedDate}`),
       fetch(`/api/steps?userId=${user.id}&date=${selectedDate}`),
       fetch(`/api/health-score?userId=${user.id}&date=${selectedDate}`),
+      fetch(`/api/exercises?userId=${user.id}&date=${selectedDate}`),
     ])
     setFoodLogs(await logsRes.json())
     const waterData = await waterRes.json()
@@ -43,6 +45,11 @@ export default function DashboardPage() {
     setSteps(stepsData[0]?.steps || 0)
     const scoreData = await scoreRes.json()
     if (scoreData) setHealthScore(scoreData.advice || scoreData)
+    const exerciseData = await exerciseRes.json()
+    const totalExerciseKcal = Array.isArray(exerciseData)
+      ? exerciseData.reduce((s: number, e: { caloriesBurned: number }) => s + e.caloriesBurned, 0)
+      : 0
+    setExerciseCalories(Math.round(totalExerciseKcal))
   }, [user, selectedDate])
 
   useEffect(() => { fetchData() }, [fetchData])
@@ -57,8 +64,9 @@ export default function DashboardPage() {
     fiber: acc.fiber + 0,
   }), { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 })
 
-  const caloriePercent = Math.min((totals.calories / user.dailyCalorieGoal) * 100, 100)
-  const remaining = user.dailyCalorieGoal - totals.calories
+  const effectiveCalorieGoal = user.dailyCalorieGoal + exerciseCalories
+  const caloriePercent = Math.min((totals.calories / effectiveCalorieGoal) * 100, 100)
+  const remaining = effectiveCalorieGoal - totals.calories
   const waterPercent = Math.min((waterTotal / user.waterGoalMl) * 100, 100)
 
   const generateScore = async () => {
@@ -115,7 +123,12 @@ export default function DashboardPage() {
         <div className="bg-white/10 rounded-2xl p-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-white font-semibold">カロリー</span>
-            <span className="text-white text-sm">{Math.round(totals.calories)} / {user.dailyCalorieGoal} kcal</span>
+            <div className="text-right">
+              <span className="text-white text-sm">{Math.round(totals.calories)} / {effectiveCalorieGoal} kcal</span>
+              {exerciseCalories > 0 && (
+                <div className="text-emerald-200 text-xs">🏋️ +{exerciseCalories} kcal 運動ボーナス</div>
+              )}
+            </div>
           </div>
           <div className="h-3 bg-white/30 rounded-full mb-2">
             <div className="h-3 bg-white rounded-full transition-all" style={{ width: `${caloriePercent}%` }} />
