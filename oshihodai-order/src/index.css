@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f3f1ff;
+  --color-brand-100: #e6e1ff;
+  --color-brand-200: #cfc6ff;
+  --color-brand-300: #ab9bff;
+  --color-brand-400: #8467ff;
+  --color-brand-500: #6a3dff;
+  --color-brand-600: #5a24f0;
+  --color-brand-700: #4b19cc;
+  --color-brand-800: #3e17a5;
+  --color-brand-900: #331683;
+  --color-brand-950: #1d0a52;
+  --color-accent-300: #d9ff5c;
+  --color-accent-400: #c6f52b;
+  --color-accent-500: #a9db0c;
+  --color-accent-600: #86b000;
+  --color-ink: #17132b;
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+
+  --animate-pop-in: pop-in 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+  --animate-fade-in: fade-in 0.2s ease-out both;
+  --animate-slide-up: slide-up 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+  --animate-bump: bump 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  --animate-combo: combo 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.6) both;
+  --animate-float-up: float-up 0.9s ease-out forwards;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-zoom-big: zoom-big 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-cart-bounce: cart-bounce 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bump {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(198, 245, 43, 0.7); }
+    100% { box-shadow: 0 0 0 28px rgba(198, 245, 43, 0); }
+  }
+  @keyframes combo {
+    0% { transform: scale(0.6) rotate(-6deg); opacity: 0; }
+    100% { transform: scale(1) rotate(-3deg); opacity: 1; }
+  }
+  @keyframes float-up {
+    0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; }
+    15% { opacity: 1; transform: translate(-50%, -12px) scale(1.15); }
+    100% { transform: translate(-50%, -80px) scale(1); opacity: 0; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes zoom-big {
+    0% { transform: scale(0.2); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+  @keyframes cart-bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.3) rotate(-8deg); }
+    60% { transform: scale(0.95) rotate(4deg); }
+    100% { transform: scale(1); }
+  }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-brand-50);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* 押下時のフィードバック（すべてのボタンに共通で効かせる） */
+.pressable {
+  transition: transform 70ms ease-out, filter 70ms ease-out, box-shadow 120ms ease-out;
+  will-change: transform;
+}
+.pressable[data-pressed="true"],
+.pressable:active {
+  transform: scale(0.93);
+  filter: brightness(0.88);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.shimmer-gold {
+  background-image: linear-gradient(110deg, #f5d36a 0%, #fff3b0 25%, #d4a017 50%, #fff3b0 75%, #f5d36a 100%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility safe-bottom {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
