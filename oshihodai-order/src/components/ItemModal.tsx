@@ -7,6 +7,7 @@ import { Modal } from './Modal'
 import { PressButton } from './PressButton'
 import { QuantityStepper } from './QuantityStepper'
 import { ItemBadges } from './Badges'
+import { ItemImage } from './ItemImage'
 import { defaultSelections, selectionsToOptions, type SelectedOptions } from '../hooks/useAddToCart'
 
 interface Props {
@@ -48,11 +49,14 @@ function Body({ item, soldOut, onClose, onAdd }: Props & { item: MenuItem }) {
   return (
     <div className="flex max-h-[92dvh] flex-col">
       <div className="relative">
-        <div className={`flex h-40 max-h-[32dvh] items-center justify-center sm:h-52 ${item.gradient}`}>
-          <div ref={emojiRef} className="text-7xl drop-shadow-lg sm:text-8xl">
-            {item.emoji}
-          </div>
-        </div>
+        <ItemImage
+          ref={emojiRef}
+          name={item.name}
+          emoji={item.emoji}
+          gradient={item.gradient}
+          emojiClassName="text-7xl sm:text-8xl"
+          className="relative h-48 max-h-[34dvh] sm:h-64"
+        />
         <div className="absolute left-3 top-3">
           <ItemBadges badges={item.badges} rank={item.rank} size="md" />
         </div>

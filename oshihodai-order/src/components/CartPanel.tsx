@@ -3,6 +3,7 @@ import { yen } from '../lib/format'
 import { sfxCancel } from '../lib/audio'
 import { PressButton } from './PressButton'
 import { QuantityStepper } from './QuantityStepper'
+import { ItemImage } from './ItemImage'
 
 interface Props {
   onCheckout: () => void
@@ -48,7 +49,7 @@ export function CartPanel({ onCheckout, onClose }: Props) {
           <ul className="flex flex-col gap-2">
             {state.cart.map((l) => (
               <li key={l.lineId} className="flex gap-2 rounded-xl border border-stone-100 p-2 animate-pop-in">
-                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-2xl ${l.gradient}`}>{l.emoji}</div>
+                <ItemImage name={l.name} emoji={l.emoji} gradient={l.gradient} emojiClassName="text-2xl" className="relative h-12 w-12 shrink-0 rounded-lg" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-bold">{l.name}</div>
                   {l.selectedOptions.length > 0 && (

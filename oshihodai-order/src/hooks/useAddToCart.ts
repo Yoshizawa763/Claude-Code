@@ -6,6 +6,7 @@ import { useCombo } from './useCombo'
 import { emitFx } from '../lib/fx'
 import { sfxCash, sfxPop, unlockAudio } from '../lib/audio'
 import { haptic } from '../lib/haptics'
+import { getPhoto, photoUrl } from '../data/photos'
 
 export type SelectedOptions = CartLine['selectedOptions']
 
@@ -63,7 +64,8 @@ export function useAddToCart() {
         haptic.medium()
       }
       if (from) {
-        emitFx({ type: 'fly', emoji: item.emoji, from })
+        const photo = getPhoto(item.name)
+        emitFx({ type: 'fly', emoji: item.emoji, image: photo ? photoUrl(photo) : undefined, from })
         emitFx({
           type: 'burst',
           x: from.left + from.width / 2,

@@ -117,6 +117,7 @@ oshihodai-order/
 │   ├── data/
 │   │   ├── menu.ts               # メニューデータ（カテゴリ・商品）
 │   │   ├── options.ts            # オプション定義（サイズ・辛さ・焼き加減 ...）
+│   │   ├── photos.ts             # メニュー写真の割り当てとクレジット
 │   │   └── badges.ts             # 称号の解放条件
 │   ├── lib/                      # 効果音・振動・localStorage・演出バス・整形
 │   ├── hooks/                    # 長押し・転がる数字・コンボ・トースト・カート投入
@@ -154,6 +155,31 @@ sub('鶏', [
 - カテゴリ自体を増やすには `src/types.ts` の `CategoryId` に ID を追加し、`CATEGORIES` と `GRADIENTS` に定義を足します。
 - オプションの選択肢を変えるには `src/data/options.ts` を編集します。
 - 称号の条件を変えるには `src/data/badges.ts` を編集します（`minItems`：累計点数、`minYen`：累計金額）。
+
+## メニュー写真の追加方法
+
+写真がない商品は、絵文字とグラデーションのイラストで表示されます。
+写真を割り当てると、メニューカード・商品詳細・カートで写真に切り替わり、カートへ飛ぶ演出も写真になります。
+
+1. 写真ファイルを `public/photos/` に置きます（例：`public/photos/karaage.webp`）。横 480px 前後の JPEG / WebP がおすすめです。
+2. `src/data/photos.ts` の `PHOTOS` に、商品名をキーにして追記します。
+
+```ts
+export const PHOTOS: Record<string, MenuPhoto> = {
+  '鶏の唐揚げ': {
+    src: 'photos/karaage.webp',
+    author: '作者名',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:...',
+  },
+}
+```
+
+- キーは `src/data/menu.ts` の商品名と完全に一致させてください。
+- 写真の読み込みに失敗した場合は、自動でイラスト表示に戻ります。
+- 登録した写真の作者・ライセンス・出典は、「伝票」画面の「📷 写真クレジット」に一覧表示されます。
+- このアプリは GitHub Pages で誰でも見られる状態で公開されます。自分で撮った写真か、自由ライセンス（CC0・CC BY・CC BY-SA など）の写真を使ってください。
+- 写真は表示した時点で端末に保存され、以後はオフラインでも表示されます。
 
 ## 保存されるデータ
 

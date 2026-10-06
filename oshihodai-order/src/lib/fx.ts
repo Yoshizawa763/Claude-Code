@@ -6,6 +6,8 @@
 export interface FlyEvent {
   type: 'fly'
   emoji: string
+  /** 写真がある商品は写真を飛ばす */
+  image?: string
   from: DOMRect
 }
 export interface ConfettiEvent {

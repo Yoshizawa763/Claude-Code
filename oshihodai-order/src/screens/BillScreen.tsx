@@ -4,6 +4,7 @@ import { ConfirmDialog } from '../components/ConfirmDialog'
 import { useApp, lineUnitPrice } from '../store/AppStore'
 import { BADGES } from '../data/badges'
 import { yen } from '../lib/format'
+import { PhotoCreditsButton } from '../components/PhotoCredits'
 
 export function BillScreen() {
   const { state, totals, dispatch } = useApp()
@@ -80,6 +81,7 @@ export function BillScreen() {
                 </div>
               )}
             </div>
+            <PhotoCreditsButton />
             <PressButton sound="cancel" onClick={() => setResetOpen(true)} className="rounded-2xl bg-stone-200 px-4 py-3 text-xs font-black text-stone-600">
               履歴と称号をリセット
             </PressButton>

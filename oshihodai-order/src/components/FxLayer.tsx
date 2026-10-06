@@ -4,6 +4,7 @@ import { getCartTargetRect, onFx, type FxEvent } from '../lib/fx'
 interface Flyer {
   id: number
   emoji: string
+  image?: string
   from: DOMRect
   to: DOMRect
 }
@@ -35,7 +36,7 @@ export function FxLayer() {
         const to = getCartTargetRect()
         if (!to) return
         const id = ++seq
-        setFlyers((f) => [...f, { id, emoji: e.emoji, from: e.from, to }])
+        setFlyers((f) => [...f, { id, emoji: e.emoji, image: e.image, from: e.from, to }])
       } else if (e.type === 'burst') {
         const id = ++seq
         setBursts((b) => [...b, { id, x: e.x, y: e.y, text: e.text, color: e.color ?? '#6a3dff' }])
@@ -95,7 +96,11 @@ function FlyingEmoji({ flyer, onDone }: { flyer: Flyer; onDone: () => void }) {
       className="absolute text-5xl drop-shadow-lg"
       style={{ left: flyer.from.left + flyer.from.width / 2, top: flyer.from.top + flyer.from.height / 2 }}
     >
-      {flyer.emoji}
+      {flyer.image ? (
+        <img src={flyer.image} alt="" className="h-20 w-20 rounded-full object-cover shadow-xl ring-4 ring-white" />
+      ) : (
+        flyer.emoji
+      )}
     </div>
   )
 }

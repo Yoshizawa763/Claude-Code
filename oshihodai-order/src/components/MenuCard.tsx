@@ -3,6 +3,7 @@ import type { MenuItem } from '../types'
 import { yen } from '../lib/format'
 import { PressButton } from './PressButton'
 import { ItemBadges } from './Badges'
+import { ItemImage } from './ItemImage'
 
 interface Props {
   item: MenuItem
@@ -28,9 +29,14 @@ export const MenuCard = memo(function MenuCard({ item, soldOut, onOpen, onQuickA
         className={`relative flex aspect-[4/3] w-full items-center justify-center ${item.gradient}`}
         aria-label={`${item.name}の詳細`}
       >
-        <div ref={emojiRef} className="text-5xl drop-shadow-md transition-transform group-active:scale-90 sm:text-6xl">
-          {item.emoji}
-        </div>
+        <ItemImage
+          ref={emojiRef}
+          name={item.name}
+          emoji={item.emoji}
+          gradient={item.gradient}
+          emojiClassName="text-5xl transition-transform group-active:scale-90 sm:text-6xl"
+          className="absolute inset-0"
+        />
         <div className="absolute left-2 top-2">
           <ItemBadges badges={item.badges} rank={item.rank} />
         </div>
