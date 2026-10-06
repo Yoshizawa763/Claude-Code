@@ -30,7 +30,7 @@ export function Modal({ open, onClose, children, sheet = false, className = '', 
       }}
     >
       <div
-        className={`${sheet ? 'w-full rounded-t-3xl sm:rounded-3xl animate-slide-up' : 'rounded-3xl animate-pop-in'} max-h-[92dvh] overflow-hidden bg-white shadow-2xl ${className}`}
+        className={`${sheet ? 'w-full rounded-t-3xl sm:rounded-3xl animate-slide-up' : 'rounded-3xl animate-pop-in'} max-h-[92dvh] overflow-hidden bg-white text-left text-ink shadow-2xl ${className}`}
         onPointerDown={(e) => e.stopPropagation()}
       >
         {children}

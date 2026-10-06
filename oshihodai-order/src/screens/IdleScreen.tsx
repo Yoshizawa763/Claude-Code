@@ -3,6 +3,7 @@ import { useApp } from '../store/AppStore'
 import { sfxStart } from '../lib/audio'
 import { haptic } from '../lib/haptics'
 import { yen } from '../lib/format'
+import { InstallButton } from '../components/InstallButton'
 
 export function IdleScreen({ onStart }: { onStart: () => void }) {
   const { totals } = useApp()
@@ -35,6 +36,10 @@ export function IdleScreen({ onStart }: { onStart: () => void }) {
             本日の累計：{totals.totalItems.toLocaleString()}点 ／ {yen(totals.totalYen)}
           </div>
         )}
+
+        <div className="mt-6">
+          <InstallButton />
+        </div>
       </div>
     </div>
   )

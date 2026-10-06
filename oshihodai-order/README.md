@@ -29,6 +29,49 @@ npm run preview   # ビルド結果をローカル配信
 npm run lint      # oxlint
 ```
 
+## スマホのホーム画面から使う（PWA）
+
+このアプリはホーム画面に追加でき、追加後はアイコンからアプリのように全画面で起動します。
+一度開いたあとは、電波がなくても起動できます（アプリ本体を端末内にキャッシュするだけで、外部への通信はしません）。
+
+### 1. ネット上に公開する（初回のみ）
+
+ホーム画面に追加するには、スマホから開ける URL が必要です。
+GitHub Pages で無料公開する仕組みを `.github/workflows/oshihodai-pages.yml` に用意しています。
+
+1. このブランチを GitHub にプッシュすると、GitHub Actions がビルドして `gh-pages` ブランチを作ります。
+2. GitHub のリポジトリ画面で **Settings → Pages** を開きます。
+3. **Build and deployment** の **Source** を「Deploy from a branch」にし、ブランチに `gh-pages`、フォルダに `/ (root)` を選んで **Save** します。
+4. 1〜2分後、次の URL で開けるようになります。
+
+```
+https://yoshizawa763.github.io/Claude-Code/
+```
+
+以後は `oshihodai-order/` を変更してプッシュするたびに自動で更新されます。
+Actions タブの「押し放題酒場を GitHub Pages に公開」から手動実行もできます。
+
+### 2. ホーム画面に追加する
+
+待機画面の「📲 ホーム画面に追加してアプリにする」ボタンを押すと、端末に合わせた手順が出ます。
+
+- **iPhone / iPad**：Safari で開き、共有ボタン ⬆️ →「ホーム画面に追加」→「追加」
+- **Android**：Chrome で開き、ボタンからそのままインストール（または ︙ メニュー →「ホーム画面に追加」）
+
+ホーム画面から起動しているときは、このボタンは表示されません。
+
+### 仕組み
+
+| ファイル | 役割 |
+| --- | --- |
+| `public/manifest.webmanifest` | アプリ名・アイコン・全画面表示の設定 |
+| `public/icons/` | ホーム画面用アイコン（ローカルで描画した PNG） |
+| `sw-template.js` | Service Worker の雛形。ビルド時に `vite.config.ts` がキャッシュ対象一覧を埋め込み `sw.js` を出力 |
+| `src/lib/pwa.ts` | Service Worker の登録、インストール可否の判定 |
+| `src/components/InstallButton.tsx` | 待機画面の「ホーム画面に追加」ボタンと手順案内 |
+
+Service Worker は本番ビルド（`npm run build` / `npm run preview` / GitHub Pages）でのみ動きます。`npm run dev` では登録されません。
+
 ## 画面の流れ
 
 ```
@@ -65,8 +108,10 @@ npm run lint      # oxlint
 ```
 oshihodai-order/
 ├── index.html
+├── sw-template.js                # Service Worker の雛形（ビルド時に sw.js を生成）
+├── public/                       # マニフェスト・アイコン
 ├── src/
-│   ├── main.tsx / App.tsx        # エントリ・画面遷移
+│   ├── main.tsx / App.tsx        # エントリ・画面遷移・PWA 初期化
 │   ├── index.css                 # Tailwind テーマ・アニメーション定義
 │   ├── types.ts                  # 型定義（MenuItem, CartLine, Order, Badge ...）
 │   ├── data/
@@ -124,4 +169,4 @@ localStorage に以下を保存します（キー接頭辞 `oshihodai:v1:`）。
 - 起動時に「これは練習用アプリです。注文は送信されません」を表示
 - 全画面の隅に常時「デモモード／注文は送信されません」を表示
 - 配色は実在チェーンを模倣しないオリジナル（紫＋ライム）
-- ネットワーク通信を行うコードは存在しません
+- 外部へのネットワーク通信を行うコードは存在しません（Service Worker が扱うのは同じサイト内のアプリ本体ファイルだけです）

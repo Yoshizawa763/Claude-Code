@@ -32,22 +32,24 @@ function Shell() {
   const withHeader = screen === 'menu' || screen === 'history' || screen === 'bill'
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden">
-      {withHeader && <Header screen={screen} onNavigate={navigate} onOpenCart={() => setCartOpen(true)} />}
+    <div className="safe-area h-dvh bg-brand-950">
+      <div className="flex h-full flex-col overflow-hidden bg-brand-50">
+        {withHeader && <Header screen={screen} onNavigate={navigate} onOpenCart={() => setCartOpen(true)} />}
 
-      {screen === 'idle' && <IdleScreen onStart={() => setScreen(state.table ? 'menu' : 'setup')} />}
-      {screen === 'setup' && <TableSetupScreen onDone={goMenu} />}
-      {screen === 'menu' && <MenuScreen cartOpen={cartOpen} setCartOpen={setCartOpen} onOrderPlaced={() => setScreen('complete')} />}
-      {screen === 'complete' && <OrderCompleteScreen onBack={goMenu} />}
-      {screen === 'history' && <HistoryScreen onGoMenu={goMenu} />}
-      {screen === 'bill' && <BillScreen />}
+        {screen === 'idle' && <IdleScreen onStart={() => setScreen(state.table ? 'menu' : 'setup')} />}
+        {screen === 'setup' && <TableSetupScreen onDone={goMenu} />}
+        {screen === 'menu' && <MenuScreen cartOpen={cartOpen} setCartOpen={setCartOpen} onOrderPlaced={() => setScreen('complete')} />}
+        {screen === 'complete' && <OrderCompleteScreen onBack={goMenu} />}
+        {screen === 'history' && <HistoryScreen onGoMenu={goMenu} />}
+        {screen === 'bill' && <BillScreen />}
 
-      <DisclaimerModal open={disclaimer} onClose={() => setDisclaimer(false)} />
-      <BadgeWatcher />
-      <ComboIndicator />
-      <Toasts />
-      <FxLayer />
-      <DemoWatermark />
+        <DisclaimerModal open={disclaimer} onClose={() => setDisclaimer(false)} />
+        <BadgeWatcher />
+        <ComboIndicator />
+        <Toasts />
+        <FxLayer />
+        <DemoWatermark />
+      </div>
     </div>
   )
 }
