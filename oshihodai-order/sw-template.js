@@ -6,7 +6,8 @@ const VERSION = '__VERSION__'
 const CACHE = 'oshihodai-' + VERSION
 const PRECACHE = __PRECACHE__
 // 写真はアプリ更新のたびに取り直さないよう、別のキャッシュに保存する
-const PHOTO_CACHE = 'oshihodai-photos-v1'
+// 写真を差し替えたら末尾の番号を上げる（古い写真のキャッシュが消える）
+const PHOTO_CACHE = 'oshihodai-photos-v2'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
