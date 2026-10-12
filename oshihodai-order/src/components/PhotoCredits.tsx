@@ -11,23 +11,23 @@ export function PhotoCreditsButton() {
 
   return (
     <>
-      <PressButton sound="tap" onClick={() => setOpen(true)} className="rounded-2xl bg-white px-4 py-3 text-xs font-black text-stone-600 shadow-sm ring-1 ring-black/5">
-        📷 写真クレジット（{entries.length}点）
+      <PressButton sound="tap" onClick={() => setOpen(true)} className="rounded-2xl bg-d-surface px-4 py-3 text-xs font-bold text-d-sub shadow-sm ring-1 ring-d-line">
+        写真クレジット（{entries.length}点）
       </PressButton>
       <Modal open={open} onClose={() => setOpen(false)} className="flex w-full max-w-lg flex-col" zIndex={130}>
-        <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3">
-          <h2 className="text-base font-black">📷 写真クレジット</h2>
-          <PressButton sound="tap" onClick={() => setOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 font-black" aria-label="閉じる">
+        <div className="flex items-center justify-between border-b border-d-line px-5 py-3">
+          <h2 className="text-base font-bold">写真クレジット</h2>
+          <PressButton sound="tap" onClick={() => setOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-full bg-d-raised font-bold" aria-label="閉じる">
             ✕
           </PressButton>
         </div>
-        <ul className="max-h-[70dvh] divide-y divide-stone-100 overflow-y-auto px-5 py-2 text-xs select-text">
+        <ul className="max-h-[70dvh] divide-y divide-d-line overflow-y-auto px-5 py-2 text-xs select-text">
           {entries.map(([name, p]) => (
             <li key={name} className="py-2">
-              <div className="font-black text-stone-800">{name}</div>
-              <div className="text-stone-500">
+              <div className="font-bold text-d-text">{name}</div>
+              <div className="text-d-sub">
                 {p.author} ／ {p.license} ／{' '}
-                <a href={p.sourceUrl} target="_blank" rel="noreferrer" className="text-brand-600 underline">
+                <a href={p.sourceUrl} target="_blank" rel="noreferrer" className="text-d-yellow underline">
                   出典
                 </a>
               </div>

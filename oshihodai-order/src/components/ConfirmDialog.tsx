@@ -16,13 +16,13 @@ export function ConfirmDialog({ open, title, children, confirmLabel = 'はい', 
   return (
     <Modal open={open} onClose={onCancel} className="w-full max-w-md" zIndex={120}>
       <div className="p-6">
-        <h3 className="text-center text-xl font-black">{title}</h3>
-        {children && <div className="mt-3 text-sm text-stone-600">{children}</div>}
+        <h3 className="text-center text-xl font-bold">{title}</h3>
+        {children && <div className="mt-3 text-sm text-d-sub">{children}</div>}
         <div className="mt-6 grid grid-cols-2 gap-3">
-          <PressButton sound="cancel" onClick={onCancel} className="h-14 rounded-2xl bg-stone-100 text-base font-black text-stone-700">
+          <PressButton sound="cancel" onClick={onCancel} className="h-14 rounded-2xl bg-d-raised text-base font-bold text-d-text">
             {cancelLabel}
           </PressButton>
-          <PressButton sound="click" haptics="medium" onClick={onConfirm} className="h-14 rounded-2xl bg-brand-600 text-base font-black text-white shadow-lg shadow-brand-600/40">
+          <PressButton sound="click" haptics="medium" onClick={onConfirm} className="h-14 rounded-xl bg-cta text-base font-bold text-d-text ">
             {confirmLabel}
           </PressButton>
         </div>

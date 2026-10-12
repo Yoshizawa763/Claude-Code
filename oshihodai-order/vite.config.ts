@@ -24,7 +24,7 @@ function serviceWorker(): Plugin {
     name: 'oshihodai-service-worker',
     apply: 'build',
     generateBundle(_options, bundle) {
-      const files = ['./', 'index.html', ...PUBLIC_PRECACHE, ...Object.keys(bundle).filter((f) => !f.endsWith('.map'))]
+      const files = ['./', 'index.html', ...PUBLIC_PRECACHE, ...Object.keys(bundle).filter((f) => !f.endsWith('.map') && !f.endsWith('.woff2'))]
       const unique = [...new Set(files)].map((f) => (f === './' ? f : './' + f))
       const version = createHash('sha256').update(unique.join('\n')).digest('hex').slice(0, 12)
       const template = readFileSync(fileURLToPath(new URL('./sw-template.js', import.meta.url)), 'utf8')

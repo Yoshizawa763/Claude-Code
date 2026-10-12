@@ -39,7 +39,7 @@ export function FxLayer() {
         setFlyers((f) => [...f, { id, emoji: e.emoji, image: e.image, from: e.from, to }])
       } else if (e.type === 'burst') {
         const id = ++seq
-        setBursts((b) => [...b, { id, x: e.x, y: e.y, text: e.text, color: e.color ?? '#6a3dff' }])
+        setBursts((b) => [...b, { id, x: e.x, y: e.y, text: e.text, color: e.color ?? '#fdc20f' }])
         window.setTimeout(() => setBursts((b) => b.filter((x) => x.id !== id)), 900)
       } else if (e.type === 'confetti') {
         launchConfetti(canvasRef.current, confettiRef.current, e.power ?? 2)
@@ -57,7 +57,7 @@ export function FxLayer() {
         {bursts.map((b) => (
           <div
             key={b.id}
-            className="absolute animate-float-up text-2xl font-black drop-shadow-md"
+            className="absolute animate-float-up text-2xl font-bold drop-shadow-md"
             style={{ left: b.x, top: b.y, color: b.color }}
           >
             {b.text}
@@ -118,7 +118,8 @@ interface Particle {
   life: number
 }
 
-const COLORS = ['#6a3dff', '#c6f52b', '#ff5c8a', '#ffd166', '#06d6a0', '#4cc9f0', '#ffffff']
+// ダイニーの配色に合わせた紙吹雪
+const COLORS = ['#fdc20f', '#e27c0e', '#e8771a', '#ee4a45', '#ff0046', '#fcfcfc']
 
 function launchConfetti(canvas: HTMLCanvasElement | null, state: { particles: Particle[]; raf: number | null }, power: number) {
   if (!canvas) return

@@ -32,8 +32,8 @@ function Shell() {
   const withHeader = screen === 'menu' || screen === 'history' || screen === 'bill'
 
   return (
-    <div className="safe-area h-dvh bg-brand-950">
-      <div className="flex h-full flex-col overflow-hidden bg-brand-50">
+    <div className="safe-area h-dvh bg-d-surface">
+      <div className="flex h-full flex-col overflow-hidden bg-d-bg">
         {withHeader && <Header screen={screen} onNavigate={navigate} onOpenCart={() => setCartOpen(true)} />}
 
         {screen === 'idle' && <IdleScreen onStart={() => setScreen(state.table ? 'menu' : 'setup')} />}

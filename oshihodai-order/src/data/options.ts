@@ -109,6 +109,27 @@ export const OPTION_GROUPS: Record<OptionGroupId, OptionGroup> = {
       { id: 'miso', label: '味噌だれ', priceDelta: 30 },
     ],
   },
+  pasta: {
+    id: 'pasta',
+    label: '茹で加減・量',
+    multiple: false,
+    choices: [
+      { id: 'aldente', label: 'アルデンテ', priceDelta: 0 },
+      { id: 'normal', label: '普通', priceDelta: 0 },
+      { id: 'large', label: '大盛', priceDelta: 250 },
+    ],
+  },
+  pizza: {
+    id: 'pizza',
+    label: 'トッピング',
+    multiple: true,
+    choices: [
+      { id: 'mozz', label: 'モッツァレラ追加', priceDelta: 200 },
+      { id: 'prosciutto', label: '生ハム追加', priceDelta: 300 },
+      { id: 'basil', label: 'バジル増し', priceDelta: 100 },
+      { id: 'chili', label: 'チリオイル', priceDelta: 0 },
+    ],
+  },
   wasabi: {
     id: 'wasabi',
     label: 'わさび',

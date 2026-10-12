@@ -36,7 +36,7 @@ export function QuantityStepper({ value, onChange, min = 1, max = 999, size = 'l
   }
 
   const big = size === 'lg'
-  const btn = big ? 'h-14 w-14 text-3xl rounded-2xl' : 'h-9 w-9 text-xl rounded-xl'
+  const btn = big ? 'h-14 w-14 text-3xl rounded-xl' : 'h-9 w-9 text-xl rounded-lg'
 
   return (
     <div className="flex items-center gap-2">
@@ -45,18 +45,18 @@ export function QuantityStepper({ value, onChange, min = 1, max = 999, size = 'l
         haptics="none"
         onClick={dec}
         disabled={value <= min}
-        className={`${btn} flex items-center justify-center bg-brand-100 font-black text-brand-800 active:bg-brand-200`}
+        className={`${btn} flex items-center justify-center bg-d-raised font-bold text-d-text active:bg-d-line`}
         aria-label="減らす"
       >
         −
       </PressButton>
-      <div className={`${big ? 'w-16 text-3xl' : 'w-10 text-lg'} text-center font-black tabular-nums`} key={value}>
+      <div className={`${big ? 'w-16 text-3xl' : 'w-10 text-lg'} text-center font-bold tabular-nums`} key={value}>
         <span className="inline-block animate-bump">{value}</span>
       </div>
       <button
         type="button"
         {...plusHandlers}
-        className={`${btn} pressable flex items-center justify-center bg-brand-600 font-black text-white shadow-md shadow-brand-600/30`}
+        className={`${btn} pressable flex items-center justify-center bg-d-raised font-bold text-d-text`}
         aria-label="増やす（長押しで連続）"
       >
         ＋

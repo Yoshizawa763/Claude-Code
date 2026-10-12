@@ -41,8 +41,8 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // メニュー写真は初回表示時に保存し、以後はオフラインでも表示する
-  if (url.pathname.includes('/photos/')) {
+  // メニュー写真とフォントは初回表示時に保存し、以後はオフラインでも表示する
+  if (url.pathname.includes('/photos/') || url.pathname.endsWith('.woff2')) {
     event.respondWith(
       caches.match(req).then(
         (cached) =>

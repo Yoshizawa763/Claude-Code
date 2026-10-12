@@ -32,7 +32,7 @@ export function InstallButton() {
       <PressButton
         sound="tap"
         onClick={onClick}
-        className="flex items-center gap-2 rounded-2xl bg-white/10 px-4 py-2.5 text-sm font-black text-white ring-1 ring-white/20"
+        className="flex items-center gap-2 rounded-2xl bg-d-raised px-4 py-2.5 text-sm font-bold text-d-text ring-1 ring-d-line"
       >
         <span className="text-lg">📲</span>
         ホーム画面に追加してアプリにする
@@ -40,14 +40,14 @@ export function InstallButton() {
 
       <Modal open={guideOpen} onClose={() => setGuideOpen(false)} className="w-full max-w-md" zIndex={250}>
         <div className="p-6">
-          <h2 className="text-center text-xl font-black">ホーム画面に追加する方法</h2>
+          <h2 className="text-center text-xl font-bold">ホーム画面に追加する方法</h2>
           {ios ? (
-            <ol className="mt-4 space-y-3 text-sm font-bold text-stone-700">
+            <ol className="mt-4 space-y-3 text-sm font-bold text-d-text">
               <li className="flex gap-3">
                 <Step n={1} />
                 <span>
                   <b>Safari</b> で開いた状態で、画面下（iPad は右上）の<b>共有ボタン</b>
-                  <span className="mx-1 inline-block rounded-md bg-stone-100 px-1.5">⬆️</span>をタップ
+                  <span className="mx-1 inline-block rounded-md bg-d-raised px-1.5">⬆️</span>をタップ
                 </span>
               </li>
               <li className="flex gap-3">
@@ -64,7 +64,7 @@ export function InstallButton() {
               </li>
             </ol>
           ) : (
-            <ol className="mt-4 space-y-3 text-sm font-bold text-stone-700">
+            <ol className="mt-4 space-y-3 text-sm font-bold text-d-text">
               <li className="flex gap-3">
                 <Step n={1} />
                 <span>
@@ -85,10 +85,10 @@ export function InstallButton() {
               </li>
             </ol>
           )}
-          <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
+          <p className="mt-4 rounded-xl bg-d-raised px-3 py-2 text-xs font-bold text-d-yellow">
             一度開けば、電波がなくてもホーム画面から起動できます。注文はもちろん送信されません。
           </p>
-          <PressButton sound="click" onClick={() => setGuideOpen(false)} className="mt-5 h-12 w-full rounded-2xl bg-brand-600 text-base font-black text-white">
+          <PressButton sound="click" onClick={() => setGuideOpen(false)} className="mt-5 h-12 w-full rounded-xl bg-cta text-base font-bold text-d-text">
             わかった
           </PressButton>
         </div>
@@ -98,5 +98,5 @@ export function InstallButton() {
 }
 
 function Step({ n }: { n: number }) {
-  return <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-black text-white">{n}</span>
+  return <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cta text-xs font-bold text-d-text">{n}</span>
 }

@@ -1,9 +1,9 @@
 import type { ItemBadge } from '../types'
 
 const STYLE: Record<ItemBadge, { label: string; cls: string }> = {
-  popular: { label: '人気', cls: 'bg-pink-500 text-white' },
-  limited: { label: '期間限定', cls: 'bg-orange-500 text-white' },
-  new: { label: 'NEW', cls: 'bg-accent-400 text-brand-950' },
+  popular: { label: '人気', cls: 'bg-d-orange text-d-text' },
+  limited: { label: '期間限定', cls: 'bg-d-red text-d-text' },
+  new: { label: 'NEW', cls: 'bg-d-yellow text-d-ink' },
 }
 
 export function ItemBadges({ badges, rank, size = 'sm' }: { badges?: ItemBadge[]; rank?: number; size?: 'sm' | 'md' }) {
@@ -12,10 +12,10 @@ export function ItemBadges({ badges, rank, size = 'sm' }: { badges?: ItemBadge[]
   return (
     <div className="flex flex-wrap gap-1">
       {rank !== undefined && (
-        <span className={`rounded-md bg-amber-400 font-black text-amber-950 ${pad}`}>👑 おすすめ{rank}位</span>
+        <span className={`rounded bg-d-yellow font-bold text-d-ink ${pad}`}>おすすめ{rank}位</span>
       )}
       {badges?.map((b) => (
-        <span key={b} className={`rounded-md font-black ${STYLE[b].cls} ${pad}`}>
+        <span key={b} className={`rounded font-bold ${STYLE[b].cls} ${pad}`}>
           {STYLE[b].label}
         </span>
       ))}

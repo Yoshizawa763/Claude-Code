@@ -26,7 +26,7 @@ export const ItemImage = forwardRef<HTMLDivElement, Props>(function ItemImage(
 
   return (
     <div ref={ref} className={`flex items-center justify-center overflow-hidden ${gradient} ${className}`}>
-      {!showPhoto && <span className={`drop-shadow-md ${emojiClassName}`}>{emoji}</span>}
+      {!showPhoto && <span className={`drop-${emojiClassName}`}>{emoji}</span>}
       {showPhoto && (
         <img
           src={photoUrl(photo)}

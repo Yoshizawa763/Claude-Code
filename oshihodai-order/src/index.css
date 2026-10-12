@@ -1,6 +1,22 @@
 @import "tailwindcss";
+@import "@fontsource-variable/noto-sans-jp";
 
 @theme {
+  /* 配色：ダイニーのお客様向けモバイルオーダー画面（公式スクリーンショット実測値） */
+  --color-d-bg: #252121;       /* 画面の地 */
+  --color-d-surface: #2d2929;  /* ヘッダー・カテゴリ列・カード */
+  --color-d-sheet: #292929;    /* 商品詳細シート */
+  --color-d-raised: #3a3535;   /* 非選択チップ・数量ボタン */
+  --color-d-line: #3d3938;     /* 区切り線 */
+  --color-d-text: #fcfcfc;     /* 本文 */
+  --color-d-sub: #b5afad;      /* 補足テキスト */
+  --color-d-muted: #85807e;    /* 薄いテキスト */
+  --color-d-ink: #252121;      /* 黄色地の上の文字 */
+  --color-d-yellow: #fdc20f;   /* 選択中タブ・カテゴリのバー */
+  --color-d-orange: #e27c0e;   /* 商品バッジ */
+  --color-d-cta-from: #e8771a; /* 「追加」ボタンのグラデーション */
+  --color-d-cta-to: #ee4a45;
+  --color-d-red: #ff0046;      /* 注意・件数バッジ */
   --color-brand-50: #f3f1ff;
   --color-brand-100: #e6e1ff;
   --color-brand-200: #cfc6ff;
@@ -17,7 +33,7 @@
   --color-accent-500: #a9db0c;
   --color-accent-600: #86b000;
   --color-ink: #17132b;
-  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-sans: "Noto Sans JP Variable", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
 
   --animate-pop-in: pop-in 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
   --animate-fade-in: fade-in 0.2s ease-out both;
@@ -49,8 +65,8 @@
     100% { transform: scale(1); }
   }
   @keyframes pulse-ring {
-    0% { box-shadow: 0 0 0 0 rgba(198, 245, 43, 0.7); }
-    100% { box-shadow: 0 0 0 28px rgba(198, 245, 43, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(253, 194, 15, 0.55); }
+    100% { box-shadow: 0 0 0 28px rgba(253, 194, 15, 0); }
   }
   @keyframes combo {
     0% { transform: scale(0.6) rotate(-6deg); opacity: 0; }
@@ -89,8 +105,8 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: var(--color-brand-50);
-  color: var(--color-ink);
+  background: var(--color-d-bg);
+  color: var(--color-d-text);
   font-family: var(--font-sans);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
@@ -119,7 +135,7 @@ button {
 .no-scrollbar { scrollbar-width: none; }
 
 .shimmer-gold {
-  background-image: linear-gradient(110deg, #f5d36a 0%, #fff3b0 25%, #d4a017 50%, #fff3b0 75%, #f5d36a 100%);
+  background-image: linear-gradient(110deg, #fdc20f 0%, #ffe38a 25%, #e27c0e 50%, #ffe38a 75%, #fdc20f 100%);
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
 }
@@ -133,4 +149,9 @@ button {
 
 @utility safe-bottom {
   padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* ダイニーの「追加」ボタンと同じ左→右のグラデーション */
+@utility bg-cta {
+  background-image: linear-gradient(90deg, var(--color-d-cta-from), var(--color-d-cta-to));
 }

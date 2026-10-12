@@ -71,7 +71,7 @@ export function useAddToCart() {
           x: from.left + from.width / 2,
           y: from.top,
           text: `+${quantity}`,
-          color: luxury ? '#d97706' : combo >= 8 ? '#ec4899' : '#6a3dff',
+          color: luxury ? '#fdc20f' : combo >= 8 ? '#ee4a45' : '#fcfcfc',
         })
       }
       if (luxury && quantity >= 10) emitFx({ type: 'confetti', power: 1 })

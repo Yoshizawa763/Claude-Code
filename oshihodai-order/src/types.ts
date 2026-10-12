@@ -11,6 +11,7 @@ export type CategoryId =
   | 'nabe'
   | 'shime'
   | 'dessert'
+  | 'italian'
   | 'luxury'
 
 export interface Category {
@@ -37,6 +38,8 @@ export type OptionGroupId =
   | 'noodle'
   | 'tare'
   | 'wasabi'
+  | 'pasta'
+  | 'pizza'
 
 export interface OptionChoice {
   id: string
