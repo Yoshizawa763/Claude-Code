@@ -1,0 +1,54 @@
+# 押し放題酒場（oshihodai-order）をビルドし、gh-pages ブランチへ公開する。
+# 初回のみ GitHub の Settings → Pages で「Deploy from a branch」→「gh-pages」「/(root)」を選択すること。
+name: 押し放題酒場を GitHub Pages に公開
+
+on:
+  push:
+    branches:
+      - claude/fake-restaurant-order-app-7mht1g
+      - claude/wisemeal-features-l7e1qa
+    paths:
+      - 'oshihodai-order/**'
+      - '.github/workflows/oshihodai-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oshihodai-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: oshihodai-order
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: oshihodai-order/package-lock.json
+
+      - name: 依存パッケージをインストール
+        run: npm ci
+
+      - name: ビルド（型チェック込み）
+        run: npm run build
+
+      - name: gh-pages ブランチへ公開
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+          touch .nojekyll
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Deploy oshihodai-order from ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
