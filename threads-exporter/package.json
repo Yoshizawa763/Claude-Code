@@ -1,0 +1,22 @@
+{
+  "name": "threads-exporter",
+  "version": "1.0.0",
+  "description": "Threadsアカウントの投稿一覧をExcel（xlsx）に出力するツール",
+  "main": "threads-export.js",
+  "bin": {
+    "threads-export": "threads-export.js"
+  },
+  "scripts": {
+    "login": "node threads-export.js --login",
+    "export": "node threads-export.js",
+    "test": "node --test test/mapping.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "playwright": "^1.50.0",
+    "xlsx": "0.18.5"
+  },
+  "license": "MIT"
+}
