@@ -1,0 +1,5 @@
+.threads_session/
+output/
+*.xlsx
+__pycache__/
+.env
